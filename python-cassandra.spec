@@ -12,7 +12,7 @@ Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra.
 # Name must match the python module/package name (as in 'import' statement)
 Name:		python-%{module}
 Version:	2.1.1
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Libraries/Python
 Source0:	https://pypi.python.org/packages/source/c/cassandra-driver/cassandra-driver-%{version}.tar.gz
@@ -37,9 +37,10 @@ BuildRequires:	python-six
 %endif
 %if %{with python3}
 # BuildRequires:	python3-futures  # Only 3.0 and 3.1
-BuildRequires:	python-mock
+BuildRequires:	python3-PyYAML
 BuildRequires:	python3-devel
 BuildRequires:	python3-distribute
+BuildRequires:	python3-mock
 BuildRequires:	python3-modules
 BuildRequires:	python3-pytz
 BuildRequires:	python3-six
