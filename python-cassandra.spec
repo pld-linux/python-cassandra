@@ -8,11 +8,10 @@
 
 %define 	module	cassandra
 Summary:	A Python client driver for Apache Cassandra
-Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra.
-# Name must match the python module/package name (as in 'import' statement)
+Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Name:		python-%{module}
 Version:	2.1.1
-Release:	2
+Release:	4
 License:	Apache v2.0
 Group:		Libraries/Python
 Source0:	https://pypi.python.org/packages/source/c/cassandra-driver/cassandra-driver-%{version}.tar.gz
@@ -20,12 +19,7 @@ Source0:	https://pypi.python.org/packages/source/c/cassandra-driver/cassandra-dr
 Patch0:		%{name}-futures_already_in_py32.patch
 URL:		http://github.com/datastax/python-driver
 BuildRequires:	rpm-pythonprov
-# remove BR: python-devel for 'noarch' packages.
-# if py_postclean is used
 BuildRequires:	rpmbuild(macros) >= 1.219
-# when using /usr/bin/env or other in-place substitutions
-#BuildRequires:	sed >= 4.0
-
 %if %{with python2}
 BuildRequires:	python-PyYAML
 BuildRequires:	python-devel
@@ -33,7 +27,7 @@ BuildRequires:	python-distribute
 BuildRequires:	python-futures
 BuildRequires:	python-pytz
 BuildRequires:	python-six
-
+Requires:	python-modules
 %endif
 %if %{with python3}
 # BuildRequires:	python3-futures  # Only 3.0 and 3.1
@@ -43,30 +37,41 @@ BuildRequires:	python3-distribute
 BuildRequires:	python3-mock
 BuildRequires:	python3-modules
 BuildRequires:	python3-pytz
-BuildRequires:	python3-six
+BuildRequires:	python3-six >= 1.6
 %endif
-#Requires:		python-libs
-Requires:	python-modules
-#BuildArch:	noarch
+Suggests:	python-blist
+
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
+A Python client driver for Apache Cassandra. 
+This driver works exclusively with the Cassandra Query Language v3 (CQL3) and Cassandra's native protocol. 
+Cassandra versions 1.2 through 2.1 are supported.
+The driver supports Python 2.6, 2.7, 3.3, and 3.4.
 
-%description -l pl.UTF-8
+# %description -l pl.UTF-8
 
 %package -n python3-%{module}
-Summary:	-
-Summary(pl.UTF-8):	-
+Summary:	A Python client driver for Apache Cassandra
+Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Group:		Libraries/Python
+Requires:	python3-six >= 1.6
+Suggests:	python3-blist
+
 
 %description -n python3-%{module}
+A Python client driver for Apache Cassandra. 
+This driver works exclusively with the Cassandra Query Language v3 (CQL3) and Cassandra's native protocol. 
+Cassandra versions 1.2 through 2.1 are supported.
+The driver supports Python 2.6, 2.7, 3.3, and 3.4.
 
-%description -n python3-%{module} -l pl.UTF-8
+# %description -n python3-%{module} -l pl.UTF-8
 
 %package apidocs
 Summary:	%{module} API documentation
 Summary(pl.UTF-8):	Dokumentacja API %{module}
 Group:		Documentation
+
 
 %description apidocs
 API documentation for %{module}.
@@ -77,9 +82,6 @@ Dokumentacja API %{module}.
 %prep
 %setup -q -n cassandra-driver-%{version}
 %patch0 -p1
-
-# fix #!%{_bindir}/env python -> #!%{__python}:
-#%{__sed} -i -e '1s,^#!.*python,#!%{__python},' %{name}.py
 
 %build
 %if %{with python2}
@@ -123,24 +125,6 @@ rm -rf $RPM_BUILD_ROOT
 	--root=$RPM_BUILD_ROOT
 %endif
 
-# in case there are examples provided
-#%if %{with python2}
-#install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-#cp -a examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-#%endif
-#%if %{with python3}
-#install -d $RPM_BUILD_ROOT%{_examplesdir}/python3-%{module}-%{version}
-#cp -a examples/* $RPM_BUILD_ROOT%{_examplesdir}/python3-%{module}-%{version}
-#find $RPM_BUILD_ROOT%{_examplesdir}/python3-%{module}-%{version} -name '*.py' \
-#	| xargs sed -i '1s|^#!.*python\b|#!%{__python3}|'
-#%endif
-
-# when files are installed in other way that standard 'setup.py
-# they need to be (re-)compiled
-## change %{py_sitedir} to %{py_sitescriptdir} for 'noarch' packages!
-#%%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-#%%py_comp $RPM_BUILD_ROOT%{py_sitedir}
-#%%py_postclean
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -148,21 +132,19 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS CREDITS ChangeLog NEWS README THANKS TODO
-# change %{py_sitedir} to %{py_sitescriptdir} for 'noarch' packages!
-%{py_sitedir}/*.py[co]
-%attr(755,root,root) %{py_sitedir}/*.so
+# %doc AUTHORS CREDITS ChangeLog NEWS README THANKS TODO
+# %{py_sitedir}/*.py[co]
+# %attr(755,root,root) %{py_sitedir}/*.so
 %if "%{py_ver}" > "2.4"
-%{py_sitedir}/%{module}-%{version}-py*.egg-info
+# %{py_sitedir}/%{module}-%{version}-py*.egg-info
 %endif
-%{_examplesdir}/%{name}-%{version}
+# %{_examplesdir}/%{name}-%{version}
 %endif
 
 %if %{with python3}
 %files -n python3-%{module}
 %defattr(644,root,root,755)
 %doc LICENSE
-# %{py3_sitedir}/%{module}
 %dir %{py3_sitedir}/%{module}
 %{py3_sitedir}/%{module}/*.py
 %{py3_sitedir}/%{module}/murmur3.cpython-*.so
@@ -172,8 +154,6 @@ rm -rf $RPM_BUILD_ROOT
 %{py3_sitedir}/%{module}/io/libevwrapper.cpython-*.so
 %{py3_sitedir}/%{module}/io/__pycache__
 %{py3_sitedir}/cassandra_driver-%{version}-py*.egg-info
-# %{_examplesdir}/python3-%{module}-%{version}
-
 %endif
 
 %if %{with doc}
