@@ -11,7 +11,7 @@ Summary:	A Python client driver for Apache Cassandra
 Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Name:		python-%{module}
 Version:	2.1.1
-Release:	4
+Release:	5
 License:	Apache v2.0
 Group:		Libraries/Python
 Source0:	https://pypi.python.org/packages/source/c/cassandra-driver/cassandra-driver-%{version}.tar.gz
