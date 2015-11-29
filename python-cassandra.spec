@@ -20,7 +20,7 @@ Patch0:		%{name}-futures_already_in_py32.patch
 URL:		http://github.com/datastax/python-driver
 BuildRequires:	libev-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	rpmbuild(macros) >= 1.710
 %if %{with python2}
 ## BuildRequires:	python-futures
 BuildRequires:	python-PyYAML
