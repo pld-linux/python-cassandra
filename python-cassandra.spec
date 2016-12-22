@@ -1,21 +1,22 @@
-# TODO: Python2.x build
+# TODO:
+# - Fix tests (seems require mock <= 1.0.1)
+# - Cleanup cython leftovers
 #
 # Conditional build:
 %bcond_with	doc		# don't build doc
 %bcond_with	tests	# do not perform "make test"
-# NOTE: 3.7.1 R:  mock<=1.0.1 for tests :/
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
+# NOTE: 3.7.1 R:  mock<=1.0.1 for tests :/
 
 %define 	module	cassandra
 Summary:	A Python client driver for Apache Cassandra
 Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Name:		python-%{module}
 Version:	3.7.1
-Release:	0.1
+Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
-# Source0:	https://pypi.python.org/packages/source/c/cassandra-driver/cassandra-driver-%{version}.tar.gz
 Source0:	https://github.com/datastax/python-driver/archive/%{version}.tar.gz
 # Source0-md5:	6c451069c85490b0f78dcb1f0a0cda5f
 URL:		http://github.com/datastax/python-driver
@@ -30,8 +31,8 @@ BuildRequires:	python-distribute
 BuildRequires:	python-pytz
 BuildRequires:	python-six
 BuildRequires:	python-sure
-Requires:	python-modules
 Requires:	python-futures
+Requires:	python-modules
 #  mock<=1.0.1
 
 %endif
