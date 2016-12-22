@@ -2,7 +2,8 @@
 #
 # Conditional build:
 %bcond_with	doc		# don't build doc
-%bcond_without	tests	# do not perform "make test"
+%bcond_with	tests	# do not perform "make test"
+# NOTE: 3.7.1 R:  mock<=1.0.1 for tests :/
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
@@ -10,13 +11,13 @@
 Summary:	A Python client driver for Apache Cassandra
 Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Name:		python-%{module}
-Version:	2.5.1
-Release:	5
+Version:	3.7.1
+Release:	0.1
 License:	Apache v2.0
 Group:		Libraries/Python
-Source0:	https://pypi.python.org/packages/source/c/cassandra-driver/cassandra-driver-%{version}.tar.gz
-# Source0-md5:	54f6ea0335e27f04fe13eb1036d01944
-Patch0:		%{name}-futures_already_in_py32.patch
+# Source0:	https://pypi.python.org/packages/source/c/cassandra-driver/cassandra-driver-%{version}.tar.gz
+Source0:	https://github.com/datastax/python-driver/archive/%{version}.tar.gz
+# Source0-md5:	6c451069c85490b0f78dcb1f0a0cda5f
 URL:		http://github.com/datastax/python-driver
 BuildRequires:	libev-devel
 BuildRequires:	rpm-pythonprov
@@ -30,6 +31,9 @@ BuildRequires:	python-pytz
 BuildRequires:	python-six
 BuildRequires:	python-sure
 Requires:	python-modules
+Requires:	python-futures
+#  mock<=1.0.1
+
 %endif
 %if %{with python3}
 # BuildRequires:	python3-futures  # Only 3.0 and 3.1
@@ -92,8 +96,7 @@ API documentation for %{module}.
 Dokumentacja API %{module}.
 
 %prep
-%setup -q -n cassandra-driver-%{version}
-%patch0 -p1
+%setup -q -n python-driver-%{version}
 
 %build
 %if %{with python2}
@@ -112,17 +115,14 @@ rm -rf _build/html/_sources
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 %if %{with python2}
 %py_install
-
 %py_postclean
 %endif
 
 %if %{with python3}
 %py3_install
 %endif
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -133,7 +133,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.rst
 %dir %{py_sitedir}/%{module}
 %{py_sitedir}/%{module}/*.py[co]
-%attr(755,root,root) %{py_sitedir}/%{module}/murmur3.so
+%attr(755,root,root) %{py_sitedir}/%{module}/*.so
 %dir %{py_sitedir}/%{module}/cqlengine
 %{py_sitedir}/%{module}/cqlengine/*.py[co]
 %dir %{py_sitedir}/%{module}/io
@@ -150,7 +150,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.rst
 %dir %{py3_sitedir}/%{module}
 %{py3_sitedir}/%{module}/*.py
-%attr(755,root,root) %{py3_sitedir}/%{module}/murmur3.cpython-*.so
+%attr(755,root,root) %{py3_sitedir}/%{module}/*.cpython-*.so
 %{py3_sitedir}/%{module}/__pycache__/
 %dir %{py3_sitedir}/%{module}/io
 %{py3_sitedir}/%{module}/io/*.py
