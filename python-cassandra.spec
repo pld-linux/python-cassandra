@@ -14,11 +14,12 @@ Summary:	A Python client driver for Apache Cassandra
 Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Name:		python-%{module}
 Version:	3.7.1
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Libraries/Python
 Source0:	https://github.com/datastax/python-driver/archive/%{version}.tar.gz
 # Source0-md5:	6c451069c85490b0f78dcb1f0a0cda5f
+Patch0:		%{name}-build.patch
 URL:		http://github.com/datastax/python-driver
 BuildRequires:	libev-devel
 BuildRequires:	rpm-pythonprov
@@ -98,6 +99,7 @@ Dokumentacja API %{module}.
 
 %prep
 %setup -q -n python-driver-%{version}
+%patch0 -p1
 
 %build
 %if %{with python2}
@@ -134,6 +136,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.rst
 %dir %{py_sitedir}/%{module}
 %{py_sitedir}/%{module}/*.py[co]
+%{py_sitedir}/%{module}/*.pxd
+%{py_sitedir}/%{module}/*.pyx
 %attr(755,root,root) %{py_sitedir}/%{module}/*.so
 %dir %{py_sitedir}/%{module}/cqlengine
 %{py_sitedir}/%{module}/cqlengine/*.py[co]
@@ -151,6 +155,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.rst
 %dir %{py3_sitedir}/%{module}
 %{py3_sitedir}/%{module}/*.py
+%{py3_sitedir}/%{module}/*.pxd
+%{py3_sitedir}/%{module}/*.pyx
 %attr(755,root,root) %{py3_sitedir}/%{module}/*.cpython-*.so
 %{py3_sitedir}/%{module}/__pycache__/
 %dir %{py3_sitedir}/%{module}/io
