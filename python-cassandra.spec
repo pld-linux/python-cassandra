@@ -13,13 +13,12 @@
 Summary:	A Python client driver for Apache Cassandra
 Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Name:		python-%{module}
-Version:	3.7.1
-Release:	5
+Version:	3.14.0
+Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
 Source0:	https://github.com/datastax/python-driver/archive/%{version}.tar.gz
-# Source0-md5:	6c451069c85490b0f78dcb1f0a0cda5f
-Patch0:		%{name}-build.patch
+# Source0-md5:	d1dfc043ced03165f62ea97c00b9f002
 URL:		http://github.com/datastax/python-driver
 BuildRequires:	libev-devel
 BuildRequires:	rpm-pythonprov
@@ -99,7 +98,6 @@ Dokumentacja API %{module}.
 
 %prep
 %setup -q -n python-driver-%{version}
-%patch0 -p1
 
 %build
 %if %{with python2}
