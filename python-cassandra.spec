@@ -9,16 +9,16 @@
 %bcond_without	python3 # CPython 3.x module
 # NOTE: 3.7.1 R:  mock<=1.0.1 for tests :/
 
-%define 	module	cassandra
+%define		module	cassandra
 Summary:	A Python client driver for Apache Cassandra
 Summary(pl.UTF-8):	Moduł Pythona dla klientów Apache Cassandra
 Name:		python-%{module}
-Version:	3.14.0
-Release:	2
+Version:	3.20.0
+Release:	1
 License:	Apache v2.0
 Group:		Libraries/Python
-Source0:	https://github.com/datastax/python-driver/archive/%{version}.tar.gz
-# Source0-md5:	d1dfc043ced03165f62ea97c00b9f002
+Source0:	https://github.com/datastax/python-driver/archive/%{version}/%{module}-%{version}.tar.gz
+# Source0-md5:	e812c012c153c3dd1bdb49378cb9ffc5
 URL:		http://github.com/datastax/python-driver
 BuildRequires:	libev-devel
 BuildRequires:	rpm-pythonprov
@@ -139,12 +139,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{py_sitedir}/%{module}/*.so
 %dir %{py_sitedir}/%{module}/cqlengine
 %{py_sitedir}/%{module}/cqlengine/*.py[co]
+%dir %{py_sitedir}/%{module}/datastax
+%{py_sitedir}/%{module}/datastax/*.py[co]
+%dir %{py_sitedir}/%{module}/datastax/cloud
+%{py_sitedir}/%{module}/datastax/cloud/*.py[co]
 %dir %{py_sitedir}/%{module}/io
 %{py_sitedir}/%{module}/io/*.py[co]
 %attr(755,root,root) %{py_sitedir}/%{module}/io/libevwrapper.so
-%if "%{py_ver}" > "2.4"
 %{py_sitedir}/cassandra_driver-%{version}-py*.egg-info
-%endif
 %endif
 
 %if %{with python3}
@@ -164,6 +166,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{py3_sitedir}/%{module}/cqlengine
 %{py3_sitedir}/%{module}/cqlengine/*.py
 %{py3_sitedir}/%{module}/cqlengine/__pycache__
+%dir %{py3_sitedir}/%{module}/datastax
+%{py3_sitedir}/%{module}/datastax/*.py
+%{py3_sitedir}/%{module}/datastax/__pycache__
+%dir %{py3_sitedir}/%{module}/datastax/cloud
+%{py3_sitedir}/%{module}/datastax/cloud/*.py
+%{py3_sitedir}/%{module}/datastax/cloud/__pycache__
 %{py3_sitedir}/cassandra_driver-%{version}-py*.egg-info
 %endif
 
