@@ -40,7 +40,6 @@ Requires:	python-modules
 # BuildRequires:	python3-futures  # Only 3.0 and 3.1
 BuildRequires:	python3-PyYAML
 BuildRequires:	python3-devel
-BuildRequires:	python3-distribute
 BuildRequires:	python3-mock
 BuildRequires:	python3-modules
 BuildRequires:	python3-pytz
